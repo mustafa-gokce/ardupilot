@@ -724,6 +724,11 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_i
     case MAV_CMD_DO_PAUSE_CONTINUE:
         return handle_command_pause_continue(packet);
 
+    // change altitude during AUTO or GUIDED modes
+    case MAV_CMD_DO_CHANGE_ALTITUDE: {
+        return handle_command_change_altitude(packet);
+    }
+
     default:
         return GCS_MAVLINK::handle_command_int_packet(packet);
     }
@@ -998,6 +1003,14 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_long_packet(const mavlink_command_
         GCS_MAVLINK_Copter::convert_COMMAND_LONG_to_COMMAND_INT(packet, packet_int);
         return handle_command_pause_continue(packet_int);
     }
+
+    // change altitude during AUTO or GUIDED modes
+    case MAV_CMD_DO_CHANGE_ALTITUDE: {
+        mavlink_command_int_t packet_int;
+        GCS_MAVLINK_Copter::convert_COMMAND_LONG_to_COMMAND_INT(packet, packet_int);
+        return handle_command_change_altitude(packet_int);
+    }
+
     default:
         return GCS_MAVLINK::handle_command_long_packet(packet);
     }
@@ -1022,6 +1035,11 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_pause_continue(const mavlink_comma
         send_text(MAV_SEVERITY_INFO, "Failed to resume");
         return MAV_RESULT_FAILED;
     }
+    return MAV_RESULT_DENIED;
+}
+
+MAV_RESULT GCS_MAVLINK_Copter::handle_command_change_altitude(const mavlink_command_int_t &packet)
+{
     return MAV_RESULT_DENIED;
 }
 
