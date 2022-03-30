@@ -50,6 +50,7 @@ public:
     friend class ModeRTL;
     friend class ModeAvoidADSB;
     friend class ModeGuided;
+    friend class ModeFollow;
     friend class ModeQHover;
     friend class ModeQLand;
     friend class ModeQLoiter;

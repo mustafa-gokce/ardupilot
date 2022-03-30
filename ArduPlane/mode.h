@@ -7,6 +7,7 @@
 #include <AP_ADSB/AP_ADSB.h>
 #include <AP_Vehicle/ModeReason.h>
 #include "quadplane.h"
+#include "config.h"
 
 class AC_PosControl;
 class AC_AttitudeControl_Multi;
@@ -52,6 +53,9 @@ public:
         THERMAL       = 24,
 #if HAL_QUADPLANE_ENABLED
         LOITER_ALT_QLAND = 25,
+#endif
+#if MODE_FOLLOW_ENABLED == ENABLED
+        FOLLOW = 26,
 #endif
     };
 
@@ -716,4 +720,36 @@ protected:
     bool _enter() override;
 };
 
+#endif
+
+#if MODE_FOLLOW_ENABLED
+class ModeFollow : public ModeGuided {
+
+public:
+
+    // inherit constructor
+    using ModeGuided::Mode;
+    Number mode_number() const override { return Number::FOLLOW; }
+    const char *name() const override { return "FOLLOW"; }
+    const char *name4() const override { return "FOLL"; }
+
+    // methods that affect movement of the vehicle in this mode
+    void update() override;
+
+    void navigate() override;
+
+    virtual bool is_guided_mode() const override { return true; }
+
+    bool allows_throttle_nudging() const override { return true; }
+
+    bool does_auto_navigation() const override { return true; }
+
+    bool does_auto_throttle() const override { return true; }
+
+protected:
+
+    bool _enter() override;
+    void _exit() override;
+
+};
 #endif

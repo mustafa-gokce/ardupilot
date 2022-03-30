@@ -152,6 +152,7 @@ public:
     friend class ModeLoiter;
     friend class ModeAvoidADSB;
     friend class ModeGuided;
+    friend class ModeFollow;
     friend class ModeInitializing;
     friend class ModeManual;
     friend class ModeQStabilize;
@@ -273,6 +274,9 @@ private:
     ModeAvoidADSB mode_avoidADSB;
 #endif
     ModeGuided mode_guided;
+#if MODE_FOLLOW_ENABLED == ENABLED
+    ModeFollow mode_follow;
+#endif
     ModeInitializing mode_initializing;
     ModeManual mode_manual;
 #if HAL_QUADPLANE_ENABLED

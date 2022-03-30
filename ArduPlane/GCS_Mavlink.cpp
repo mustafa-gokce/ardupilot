@@ -54,6 +54,9 @@ MAV_MODE GCS_MAVLINK_Plane::base_mode() const
     case Mode::Number::THERMAL:
     case Mode::Number::AVOID_ADSB:
     case Mode::Number::GUIDED:
+#if MODE_FOLLOW_ENABLED
+    case Mode::Number::FOLLOW:
+#endif
     case Mode::Number::CIRCLE:
     case Mode::Number::TAKEOFF:
 #if HAL_QUADPLANE_ENABLED
@@ -658,7 +661,7 @@ void GCS_MAVLINK_Plane::packetReceived(const mavlink_status_t &status,
 #if HAL_ADSB_ENABLED
     plane.avoidance_adsb.handle_msg(msg);
 #endif
-#if AP_SCRIPTING_ENABLED
+#if MODE_FOLLOW_ENABLED
     // pass message to follow library
     plane.g2.follow.handle_msg(msg);
 #endif
@@ -893,14 +896,17 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_command_int_packet(const mavlink_command_in
         return handle_command_int_guided_slew_commands(packet);
 
     case MAV_CMD_DO_FOLLOW:
-#if AP_SCRIPTING_ENABLED
+#if MODE_FOLLOW_ENABLED
         // param1: sysid of target to follow
-        if ((packet.param1 > 0) && (packet.param1 <= 255)) {
-            plane.g2.follow.set_target_sysid((uint8_t)packet.param1);
+        if ((packet.param1 > 0) &&
+            (packet.param1 <= 255) &&
+            ((uint8_t) packet.param1 != mavlink_system.sysid)) {
+            plane.g2.follow.set_target_sysid((uint8_t) packet.param1);
             return MAV_RESULT_ACCEPTED;
         }
-#endif
         return MAV_RESULT_FAILED;
+#endif
+        return MAV_RESULT_UNSUPPORTED;
         
     default:
         return GCS_MAVLINK::handle_command_int_packet(packet);
@@ -1103,15 +1109,18 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_command_long_packet(const mavlink_command_l
         }
         return MAV_RESULT_ACCEPTED;
 
-#if AP_SCRIPTING_ENABLED
     case MAV_CMD_DO_FOLLOW:
+#if MODE_FOLLOW_ENABLED
         // param1: sysid of target to follow
-        if ((packet.param1 > 0) && (packet.param1 <= 255)) {
-            plane.g2.follow.set_target_sysid((uint8_t)packet.param1);
+        if ((packet.param1 > 0) &&
+            (packet.param1 <= 255) &&
+            ((uint8_t) packet.param1 != mavlink_system.sysid)) {
+            plane.g2.follow.set_target_sysid((uint8_t) packet.param1);
             return MAV_RESULT_ACCEPTED;
         }
         return MAV_RESULT_FAILED;
 #endif
+        return MAV_RESULT_UNSUPPORTED;
         
     default:
         return GCS_MAVLINK::handle_command_long_packet(packet);
