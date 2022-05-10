@@ -755,19 +755,34 @@ bool Plane::get_target_location(Location& target_loc)
 /*
   update_target_location() works in all auto navigation modes
  */
-bool Plane::update_target_location(const Location &old_loc, const Location &new_loc)
+bool Plane::update_target_location(Location &old_loc, Location &new_loc)
 {
-    if (!old_loc.same_latlon_as(next_WP_loc)) {
+    // check new location is not empty
+    if (new_loc.is_zero()) {
         return false;
     }
-    ftype alt_diff;
-    if (!old_loc.get_alt_distance(next_WP_loc, alt_diff) ||
-        !is_zero(alt_diff)) {
-        return false;
-    }
-    next_WP_loc = new_loc;
-    next_WP_loc.change_alt_frame(old_loc.get_alt_frame());
 
+    // sanitize old location
+    if (old_loc.is_zero()) {
+        old_loc = plane.current_loc;
+    }
+
+    // convert altitude frame type of the old and new locations to absolute
+    if (!old_loc.change_alt_frame(Location::AltFrame::ABSOLUTE) ||
+        !new_loc.change_alt_frame(Location::AltFrame::ABSOLUTE)) {
+        return false;
+    }
+
+    // set altitude of the old location to altitude of the new location
+    int32_t alt = 0;
+    if (!new_loc.get_alt_cm(Location::AltFrame::ABSOLUTE, alt)) {
+        return false;
+    }
+    old_loc.set_alt_cm(alt, Location::AltFrame::ABSOLUTE);
+
+    // update trajectory path
+    next_WP_loc = new_loc;
+    prev_WP_loc = old_loc;
     return true;
 }
 

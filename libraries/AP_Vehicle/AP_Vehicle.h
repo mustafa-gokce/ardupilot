@@ -209,7 +209,7 @@ public:
 
     // get target location (for use by scripting)
     virtual bool get_target_location(Location& target_loc) { return false; }
-    virtual bool update_target_location(const Location &old_loc, const Location &new_loc) { return false; }
+    virtual bool update_target_location(Location &old_loc, Location &new_loc) { return false; }
 
     // circle mode controls (only used by scripting with Copter)
     virtual bool get_circle_radius(float &radius_m) { return false; }
