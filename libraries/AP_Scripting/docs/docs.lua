@@ -1344,6 +1344,15 @@ function vehicle:update_target_location(current_target, new_target) end
 function vehicle:get_target_location() end
 
 -- desc
+---@param target_airspeed float -- desired target airspeed in meters per second
+---@return boolean
+function vehicle:update_target_airspeed(target_airspeed) end
+
+-- desc
+---@return float|nil
+function vehicle:get_target_airspeed() end
+
+-- desc
 ---@param target_loc Location_ud
 ---@return boolean
 function vehicle:set_target_location(target_loc) end

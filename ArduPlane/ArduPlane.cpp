@@ -786,6 +786,55 @@ bool Plane::update_target_location(Location &old_loc, Location &new_loc)
     return true;
 }
 
+// get target airspeed (for use by scripting)
+bool Plane::get_target_airspeed(float& target_airspeed)
+{
+    // do not get uninitialized target airspeed
+    if (plane.target_airspeed_cm < 0 ){
+        target_airspeed = 0;
+        return false;
+    }
+
+    // get target airspeed
+    target_airspeed = plane.target_airspeed_cm * 0.01;
+    return true;
+}
+
+/*
+  update_target_airspeed() works in all auto navigation modes
+ */
+bool Plane::update_target_airspeed(const float &target_airspeed)
+{
+    // command is only valid in guided mode
+    if (plane.control_mode != &plane.mode_guided) {
+        return false;
+    }
+
+    // reject airspeeds that are outside of the tuning envelope
+    if (target_airspeed > plane.aparm.airspeed_max || target_airspeed < plane.aparm.airspeed_min) {
+        return false;
+    }
+
+    // no need to process any new packet with the same airspeed
+    float new_target_airspeed_cm = target_airspeed * 100;
+    if (is_equal(new_target_airspeed_cm,plane.guided_state.target_airspeed_cm)) {
+        return true;
+    }
+
+    // update target airspeed and acceleration
+    plane.guided_state.target_airspeed_cm = new_target_airspeed_cm;
+    plane.guided_state.target_airspeed_time_ms = AP_HAL::millis();
+    plane.guided_state.target_airspeed_accel = 1000.0f;
+
+    // assign an acceleration direction
+    if (plane.guided_state.target_airspeed_cm < plane.target_airspeed_cm) {
+        plane.guided_state.target_airspeed_accel *= -1.0f;
+    }
+
+    // succesfully updated target airspeed
+    return true;
+}
+
 // allow for velocity matching in VTOL
 bool Plane::set_velocity_match(const Vector2f &velocity)
 {

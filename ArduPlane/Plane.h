@@ -1209,6 +1209,8 @@ public:
     bool get_target_location(Location& target_loc) override;
     bool update_target_location(Location &old_loc, Location &new_loc) override;
     bool set_velocity_match(const Vector2f &velocity) override;
+    bool get_target_airspeed(float& target_airspeed) override;
+    bool update_target_airspeed(const float &target_airspeed) override;
 #endif // AP_SCRIPTING_ENABLED
 
 };

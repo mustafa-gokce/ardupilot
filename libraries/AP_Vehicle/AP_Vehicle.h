@@ -211,6 +211,10 @@ public:
     virtual bool get_target_location(Location& target_loc) { return false; }
     virtual bool update_target_location(Location &old_loc, Location &new_loc) { return false; }
 
+    // update target airspeed (for use by scripting)
+    virtual bool get_target_airspeed(float& target_airspeed) { return false; }
+    virtual bool update_target_airspeed(const float &target_airspeed) { return false; }
+
     // circle mode controls (only used by scripting with Copter)
     virtual bool get_circle_radius(float &radius_m) { return false; }
     virtual bool set_circle_rate(float rate_dps) { return false; }

@@ -217,6 +217,8 @@ singleton AP_Vehicle method start_takeoff boolean float (-LOCATION_ALT_MAX_M*100
 singleton AP_Vehicle method set_target_location boolean Location
 singleton AP_Vehicle method get_target_location boolean Location'Null
 singleton AP_Vehicle method update_target_location boolean Location Location
+singleton AP_Vehicle method get_target_airspeed boolean float'Null
+singleton AP_Vehicle method update_target_airspeed boolean float'skip_check
 singleton AP_Vehicle method set_target_pos_NED boolean Vector3f boolean float -360 +360 boolean float'skip_check boolean boolean
 singleton AP_Vehicle method set_target_posvel_NED boolean Vector3f Vector3f
 singleton AP_Vehicle method set_target_posvelaccel_NED boolean Vector3f Vector3f Vector3f boolean float -360 +360 boolean float'skip_check boolean
