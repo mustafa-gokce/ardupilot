@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+def build(bld):
+    vehicle = bld.path.name
+    bld.ap_stlib(
+        name=vehicle + '_libs',
+        ap_vehicle=vehicle,
+        ap_libraries=['AP_GPS']
+    )
+
+    bld.ap_program(
+        program_name='ArduGNSS',
+        program_groups=['bin', 'ArduGNSS'],
+        use=vehicle + '_libs',
+        )

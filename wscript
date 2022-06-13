@@ -576,11 +576,11 @@ def generate_tasklist(ctx, do_print=True):
                 task['targets'] = ['iofirmware', 'bootloader']
             else:
                 if 'sitl' in board or 'SITL' in board:
-                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'replay']
+                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'replay', 'ArduGNSS']
                 elif 'linux' in board:
-                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub']
+                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'ArduGNSS']
                 else:
-                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'bootloader']
+                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'bootloader', 'ArduGNSS']
                     task['buildOptions'] = '--upload'
             tasks.append(task)
         tlist.write(json.dumps(tasks))
@@ -793,7 +793,7 @@ ardupilotwaf.build_command('check-all',
     doc='shortcut for `waf check --alltests`',
 )
 
-for name in ('antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'blimp', 'bootloader','iofirmware','AP_Periph','replay'):
+for name in ('antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'blimp', 'bootloader','iofirmware','AP_Periph','replay', 'ArduGNSS'):
     ardupilotwaf.build_command(name,
         program_group_list=name,
         doc='builds %s programs' % name,
