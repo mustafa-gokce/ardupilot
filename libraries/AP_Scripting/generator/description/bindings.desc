@@ -277,6 +277,8 @@ singleton AP_Vehicle method set_velocity_match boolean Vector2f
 singleton AP_Vehicle method set_land_descent_rate boolean float'skip_check
 singleton AP_Vehicle method has_ekf_failsafed boolean
 singleton AP_Vehicle method reboot void boolean
+singleton AP_Vehicle method landed_state MAV_LANDED_STATE MAV_LANDED_STATE_UNDEFINED'literal
+singleton AP_Vehicle method vtol_state MAV_VTOL_STATE MAV_VTOL_STATE_UNDEFINED'literal
 
 include AP_SerialLED/AP_SerialLED.h
 singleton AP_SerialLED rename serialLED

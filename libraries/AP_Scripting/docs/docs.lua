@@ -2089,6 +2089,24 @@ function vehicle:nav_script_time() end
 function vehicle:reboot(hold_in_bootloader) end
 
 -- desc
+---@return integer
+---| '0' # MAV_LANDED_STATE_UNDEFINED=0, /* MAV landed state is unknown | */
+---| '1' # MAV_LANDED_STATE_ON_GROUND=1, /* MAV is landed (on ground) | */
+---| '2' # MAV_LANDED_STATE_IN_AIR=2, /* MAV is in air | */
+---| '3' # MAV_LANDED_STATE_TAKEOFF=3, /* MAV currently taking off | */
+---| '4' # MAV_LANDED_STATE_LANDING=4, /* MAV currently landing | */
+function vehicle:landed_state() end
+
+-- desc
+---@return integer
+---| '0' # MAV_VTOL_STATE_UNDEFINED=0, /* MAV is not configured as VTOL | */
+---| '1' # MAV_VTOL_STATE_TRANSITION_TO_FW=1, /* VTOL is in transition from multicopter to fixed-wing | */
+---| '2' # MAV_VTOL_STATE_TRANSITION_TO_MC=2, /* VTOL is in transition from fixed-wing to multicopter | */
+---| '3' # MAV_VTOL_STATE_MC=3, /* VTOL is in multicopter state | */
+---| '4' # MAV_VTOL_STATE_FW=4, /* VTOL is in fixed-wing state | */
+function vehicle:vtol_state() end
+
+-- desc
 ---@class onvif
 onvif = {}
 
